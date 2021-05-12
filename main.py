@@ -1,6 +1,5 @@
 import os
 from json import load
-from updater import check_software_updates
 import pygame
 
 import scenes.headpiece.functions
@@ -19,7 +18,6 @@ def main():
     with open(f'{base_dir}/config/config.json', 'r') as file:
         config = load(file)
 
-    check_software_updates(config['version'], base_dir)
 
     with open(f'{base_dir}/config/user.json', 'r') as file:
         config['user'] = load(file)
@@ -37,7 +35,7 @@ def main():
     tick = 0
 
     # Headpiece init
-    text = scenes.headpiece.functions.init(screen, base_dir, config, 'YariKartoshe4ka')
+    text = scenes.headpiece.functions.init(screen, base_dir, config, 'UFO')
 
     # Lobby init
     play_button, table_button, settings_button, caption = scenes.lobby.functions.init(screen, base_dir, config)
@@ -54,7 +52,7 @@ def main():
     bg, plate, score, end, pause = scenes.game.functions.init(screen, base_dir, config, 'Score: 0')
     astrs = pygame.sprite.Group()
     boosts = pygame.sprite.Group()
-
+    bullet = pygame.sprite.Group()
 
     while True:
         tick += 1
@@ -80,10 +78,9 @@ def main():
                 full_screen_button.changed = config['user'][full_screen_button.index]
 
         elif config['scene'] == 'game':
-            scenes.game.functions.update(screen, config, base_dir, bg, plate, astrs, boosts, score, end, pause, tick)
-            scenes.game.functions.check_collides(config, base_dir, astrs, boosts, plate, play_button, table_button, settings_button, table)
-            scenes.game.functions.check_events(config, base_dir, plate, astrs, boosts, end, pause, play_button, table_button, settings_button)
-
+            scenes.game.functions.check_collides(screen, config, base_dir, astrs, boosts, plate, bullet, play_button, table_button, settings_button, table)
+            scenes.game.functions.check_events(screen, config, base_dir, plate, astrs, boosts, bullet, end, pause, play_button, table_button, settings_button)
+            scenes.game.functions.update(screen, config, base_dir, bg, plate, astrs, boosts, bullet, score, end, pause, tick)
 
         if tick >= config['FPS'] * 10:
             tick = 0
