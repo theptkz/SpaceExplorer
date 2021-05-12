@@ -23,7 +23,7 @@ def update(screen, config, text, tick):
         config['scene'] = 'lobby'
 
     if tick % (config['FPS'] * 2) == 0:
-        text.msg = 'With love'
+        text.msg = '2021'
 
     text.update()
     text.blit()

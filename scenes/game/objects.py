@@ -143,7 +143,7 @@ class Asteroid(pygame.sprite.Sprite):
         self.screen.blit(self.img, self.rect)
 
     def update(self):
-        self.rect.x -= self.config['speed']
+        self.rect.centerx -= self.config['speed']
 
 
 class FlyingAsteroid(pygame.sprite.Sprite):
@@ -173,8 +173,84 @@ class FlyingAsteroid(pygame.sprite.Sprite):
         self.rect.x -= self.config['speed'] * 1.5
         self.rect.y += self.config['speed']
 
+class BulletBoost(BoostMixin ,pygame.sprite.Sprite):
+    def __init__(self, screen, base_dir, config, plate, fire = False,life = 5):
+        pygame.sprite.Sprite.__init__(self)
+
+        self.name = 'bullet'
 
 
+        self.life = life
+        self.fire = fire
+        self.plate = plate
+
+        self.screen = screen
+        self.screen_rect = self.screen.get_rect()
+
+
+        self.config = config
+
+        self.img_idle = pygame.image.load(f'{base_dir}/assets/images/bullet/bullet.bmp')
+        self.img = self.img_idle
+
+        self.img_small = pygame.image.load(f'{base_dir}/assets/images/bullet/bullet.bmp')
+        self.img_3 = self.img_small
+
+        self.img_activate = pygame.image.load(f'{base_dir}/assets/images/bullet/bullet.bmp')
+        self.img_4 = self.img_activate
+
+        self.rect = self.img.get_rect()
+        self.rect.y = randint(self.screen_rect.top, self.screen_rect.bottom - self.rect.height - 2)
+        self.rect.left = self.screen_rect.right
+
+        self.rect_3 = self.img_3.get_rect()
+        self.rect_3.top = self.screen_rect.top 
+        self.rect_3.left = self.screen_rect.left
+        
+
+        BoostMixin.__init__( self, base_dir, config)
+        
+    # def blit(self):
+    #     self._blit()
+    #     if self.fire:
+    #         self.screen.blit(self.img_4, self.rect_4)
+
+    # def update(self):
+    #     if self.fire:
+    #         self.rect_4.centerx += self.config['speed'] * 3
+    #         if self.rect_4.left > self.screen_rect.right:
+    #             self.kill()
+    #     else:
+    #         self._update()
+
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self, screen, base_dir, config, plate, fire=False):
+        pygame.sprite.Sprite.__init__(self)
+        
+        self.fire = fire
+        self.plate = plate
+
+        self.screen = screen
+        self.screen_rect = self.screen.get_rect()
+
+        self.config = config
+
+        self.img_idle = pygame.image.load(f'{base_dir}/assets/images/bullet/bullet.bmp')
+        self.img = self.img_idle
+
+        self.rect = self.img.get_rect()
+        self.rect.centery = self.plate.rect.centery 
+        self.rect.x = 5
+    
+    def blit(self):
+        self.screen.blit(self.img, self.rect)
+
+    def update(self):
+        if self.fire:
+            self.rect.centerx += self.config['speed'] * 3
+            if self.rect.left > self.screen_rect.right:
+                self.kill()
+ 
 class TimeBoost(BoostMixin, pygame.sprite.Sprite):
     def __init__(self, screen, base_dir, config, life=5):
         pygame.sprite.Sprite.__init__(self)

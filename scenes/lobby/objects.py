@@ -62,7 +62,7 @@ class SettingsButton(FloatButtonMixin):
 
 
 class Caption(CaptionMixin):
-    def __init__(self, screen, base_dir, config, caption='Space Way'):
+    def __init__(self, screen, base_dir, config, caption='Space Explorer'):
         CaptionMixin.__init__(self, base_dir, config, caption)
 
         self.screen = screen
